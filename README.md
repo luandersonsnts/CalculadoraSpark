@@ -23,3 +23,11 @@ Porcentagem: \a\"p"\b\
 o operador de porcentagem será o caractere "p" pois não funcionou com o caractere "%"
 Raiz quadrada: \a\ "r" \b\
 Raiz quadrada foi utilizado o caractere "r"
+
+# Servidor A
+O Servidor conecta pela port 8082 com o cliente, e recebe informações via socket.
+Realiza as operações básicas e retorna o resultado em String para o cliente.
+
+# Servidor B:
+O Servidor conecta pela port 8083 com o cliente, e recebe informações via socket.
+Realiza as operações de porcentagem, raiz quadrada e potenciação, retornando o resultado em String para o cliente.
