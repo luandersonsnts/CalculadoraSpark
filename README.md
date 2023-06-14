@@ -39,4 +39,4 @@ Ao longo do projeto obtive dificuldades relacionadas a extração de váriavéis
 # INFORMAÇÕES ADQUIRIDAS:
 https://www.devmedia.com.br/introducao-ao-apache-spark/34178
 
-Com auxilio de:
+Com auxilio de: https://github.com/JobasFernandes
