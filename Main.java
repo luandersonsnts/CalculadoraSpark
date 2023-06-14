@@ -16,7 +16,7 @@ public class Main {
         get("/", (req, res) -> renderTodos(req));
 
         get("/hello", (req, res) -> "Hello World");
-        get("/executarOperacao/:op1/:operador/:op2", (req, res) -> {
+        get("/executarOperacao/:op1/:operador/:op2", (req, res) -> { // DEFINE OS PARAMETROS PARA EXECUTAR O CALC NO SERVER
             double op1 = Double.parseDouble(req.params(":op1"));
             char operador = req.params(":operador").charAt(0);
             double op2 = Double.parseDouble(req.params(":op2"));
