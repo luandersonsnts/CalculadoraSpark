@@ -2,6 +2,10 @@ import spark.ModelAndView;
 import spark.Request;
 import spark.template.velocity.VelocityTemplateEngine;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,35 +20,62 @@ public class Main {
         get("/", (req, res) -> renderTodos(req));
 
         get("/hello", (req, res) -> "Hello World");
-        get("/executarOperacao/:op1/:operador/:op2", (req, res) -> {
+        get("/executarOperacao/:op1/:operador/:op2", (req, res) -> { // DEFINE OS PARAMETROS PARA EXECUTAR O CALC NO SERVER
             double op1 = Double.parseDouble(req.params(":op1"));
             char operador = req.params(":operador").charAt(0);
             double op2 = Double.parseDouble(req.params(":op2"));
 
+            double resultado = 0.0;
 
-            double resultado;
-                if (operador == '+' || operador == '-' || operador == '*' || operador == '/') {
-                ServerA serverA = new ServerA();
-                resultado = serverA.executarOperacao(op1, operador, op2);
-                } else {
-                ServerB serverB = new ServerB();
-                switch (operador) {
-                    case 'p':
-                        resultado = serverB.calcularPorcentagem(op1, op2);
-                        break;
-                    case 'r':
-                        resultado = serverB.calcularRaizQuadrada(op1);
-                        break;
-                    case '^':
-                        resultado = serverB.calcularPotenciacao(op1, op2);
-                        break;
-                    default:
-                        throw new IllegalArgumentException("Operador inválido");
-                }
+            try {
+                Socket serverSocket = conectarServidor(operador);
+
+                // Cria os streams de entrada e saída para comunicação com o servidor
+                ObjectOutputStream out = new ObjectOutputStream(serverSocket.getOutputStream());
+                ObjectInputStream in = new ObjectInputStream(serverSocket.getInputStream());
+
+                // Envia a operação e os valores para o servidor
+                out.writeDouble(op1);
+                out.writeChar(operador);
+                out.writeDouble(op2);
+                out.flush();
+
+                // Recebe o resultado do servidor
+                resultado = in.readDouble();
+
+                // Fecha as conexões com o servidor
+                out.close();
+                in.close();
+                serverSocket.close();
+            } catch (IOException e) {
+                e.printStackTrace();
             }
 
             return "Resultado: " + resultado;
         });
+    }
+
+    private static Socket conectarServidor(char operador) throws IOException {
+        int portaServidor = obterPortaServidor(operador);
+        return new Socket("localhost", portaServidor);
+    }
+
+    private static int obterPortaServidor(char operador) {
+        // Mapear os operadores para as portas dos servidores correspondentes
+        switch (operador) {
+            case '+':
+            case '-':
+            case '*':
+            case 'd':
+                return 8082; // Porta do servidor ServerA
+            case 'p':
+            case 'r':
+            case '^':
+                return 8083; // Porta do servidor ServerB
+            // Adicione casos para novos servidores aqui
+            default:
+                throw new IllegalArgumentException("Operador inválido");
+        }
     }
 
     private static String renderTodos(Request req) {
