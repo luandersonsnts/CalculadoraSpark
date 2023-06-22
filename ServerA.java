@@ -1,27 +1,3 @@
-/*public class ServerA {
-    public double executarOperacao(double op1, char operador, double op2) {
-        double resultado = 0.0;
-        switch (operador) {
-            case '+':
-                resultado = op1 + op2;
-                break;
-            case '-':
-                resultado = op1 - op2;
-                break;
-            case '*':
-                resultado = op1 * op2;
-                break;
-            case '/':
-                resultado = op1 / op2;
-                break;
-            default:
-                System.out.println("OPERADOR INVALIDO");
-        }
-        return resultado;
-    }
-}*/
-
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -40,17 +16,17 @@ public class ServerA {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Cliente conectado: " + clientSocket.getInetAddress());
 
-                // CRIA OS STREAMS DE ENTRADA E SAIDA DO CLIENTE
+                // CRIA OS STREAMS DE ENTRADA E SAÍDA DO CLIENTE
                 ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
                 ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
 
                 try {
-                    // RECEBENDO A OPERAÇÃO PARA CALCULO
+                    // RECEBENDO A OPERAÇÃO PARA CÁLCULO
                     double op1 = in.readDouble();
                     char operador = in.readChar();
                     double op2 = in.readDouble();
 
-                    // REALIZANDO ELA
+                    // REALIZANDO A OPERAÇÃO
                     double resultado = executarOperacao(op1, operador, op2);
 
                     // ENVIA O RESULTADO DE VOLTA PARA O CLIENTE
@@ -84,11 +60,11 @@ public class ServerA {
             case '*':
                 resultado = op1 * op2;
                 break;
-            case '/':
+            case 'd':
                 resultado = op1 / op2;
                 break;
             default:
-                System.out.println("OPERADOR INVALIDO - SABE USAR CALC?");
+                System.out.println("OPERADOR INVÁLIDO");
         }
         return resultado;
     }
