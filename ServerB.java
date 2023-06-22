@@ -1,17 +1,3 @@
-/*public class ServerB {
-    public double calcularPorcentagem(double valor, double porcentagem) {
-        return valor * (porcentagem / 100);
-    }
-
-    public double calcularRaizQuadrada(double valor) {
-        return Math.sqrt(valor);
-    }
-
-    public double calcularPotenciacao(double base, double expoente) {
-        return Math.pow(base, expoente);
-    }
-}*/
-
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -30,26 +16,26 @@ public class ServerB {
                 Socket clientSocket = serverSocket.accept();
                 System.out.println("Cliente conectado: " + clientSocket.getInetAddress());
 
-                // Cria os streams de entrada e saída para comunicação com o cliente
+                // CRIA OS STREAMS DE ENTRADA E SAÍDA DO CLIENTE
                 ObjectInputStream in = new ObjectInputStream(clientSocket.getInputStream());
                 ObjectOutputStream out = new ObjectOutputStream(clientSocket.getOutputStream());
 
                 try {
-                    // RECEBENDO A OPERAÇÃO PARA CALCULO
-                    String operacao = in.readUTF();
+                    // RECEBENDO A OPERAÇÃO PARA CÁLCULO
                     double op1 = in.readDouble();
+                    char operador = in.readChar();
                     double op2 = in.readDouble();
 
-                    // REALIZANDO ELA
+                    // REALIZANDO A OPERAÇÃO
                     double resultado;
-                    switch (operacao) {
-                        case "porcentagem":
+                    switch (operador) {
+                        case 'p':
                             resultado = calcularPorcentagem(op1, op2);
                             break;
-                        case "raiz":
+                        case 'r':
                             resultado = calcularRaizQuadrada(op1);
                             break;
-                        case "potencia":
+                        case '^':
                             resultado = calcularPotenciacao(op1, op2);
                             break;
                         default:
@@ -86,5 +72,3 @@ public class ServerB {
         return Math.pow(base, expoente);
     }
 }
-
-
